@@ -1,0 +1,175 @@
+enable
+configure terminal
+hostname SW-HQ
+no ip domain-lookup
+enable secret MediLinkEnable2026
+username netadmin privilege 15 secret MediLinkLab2026
+service password-encryption
+ip domain-name medilink.test
+access-list 10 permit 10.10.99.0 0.0.0.255
+line console 0
+logging synchronous
+exec-timeout 15 0
+exit
+line vty 0 15
+login local
+transport input ssh
+access-class 10 in
+exec-timeout 10 0
+exit
+vlan 10
+name CLINICAL
+exit
+vlan 20
+name BIOMEDICAL
+exit
+vlan 30
+name ADMIN
+exit
+vlan 40
+name GUEST
+exit
+vlan 50
+name SERVERS
+exit
+vlan 99
+name MANAGEMENT
+exit
+vlan 999
+name PARKING
+exit
+interface GigabitEthernet0/1
+description TRUNK_TO_R_HQ_Gi0/0
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,99
+no shutdown
+exit
+interface FastEthernet0/1
+switchport mode access
+switchport access vlan 10
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/2
+switchport mode access
+switchport access vlan 10
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/3
+switchport mode access
+switchport access vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/4
+switchport mode access
+switchport access vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/5
+switchport mode access
+switchport access vlan 30
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/6
+switchport mode access
+switchport access vlan 40
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/7
+switchport mode access
+switchport access vlan 99
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/8
+switchport mode access
+switchport access vlan 50
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/9
+switchport mode access
+switchport access vlan 50
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/10
+switchport mode access
+switchport access vlan 50
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface range FastEthernet0/11-24
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+interface GigabitEthernet0/2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+interface Vlan99
+ip address 10.10.99.2 255.255.255.0
+no shutdown
+exit
+ip default-gateway 10.10.99.1
+logging 10.10.50.10
+ntp server 10.10.50.10
+end
+write memory

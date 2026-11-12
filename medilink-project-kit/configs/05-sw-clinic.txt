@@ -1,0 +1,65 @@
+enable
+configure terminal
+hostname SW-CLINIC
+no ip domain-lookup
+enable secret MediLinkEnable2026
+username netadmin privilege 15 secret MediLinkLab2026
+service password-encryption
+ip domain-name medilink.test
+access-list 10 permit 10.10.99.0 0.0.0.255
+line console 0
+logging synchronous
+exec-timeout 15 0
+exit
+line vty 0 15
+login local
+transport input ssh
+access-class 10 in
+exec-timeout 10 0
+exit
+vlan 60
+name CLINIC
+exit
+vlan 999
+name PARKING
+exit
+interface GigabitEthernet0/1
+description TO_R_CLINIC_Gi0/0
+switchport mode access
+switchport access vlan 60
+no shutdown
+exit
+interface FastEthernet0/1
+switchport mode access
+switchport access vlan 60
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface FastEthernet0/2
+switchport mode access
+switchport access vlan 60
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no shutdown
+exit
+interface range FastEthernet0/3-24
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+interface GigabitEthernet0/2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+end
+write memory

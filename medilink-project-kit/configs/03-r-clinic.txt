@@ -1,0 +1,71 @@
+enable
+configure terminal
+hostname R-CLINIC
+no ip domain-lookup
+enable secret MediLinkEnable2026
+username netadmin privilege 15 secret MediLinkLab2026
+service password-encryption
+ip domain-name medilink.test
+access-list 10 permit 10.10.99.0 0.0.0.255
+line console 0
+logging synchronous
+exec-timeout 15 0
+exit
+line vty 0 15
+login local
+transport input ssh
+access-class 10 in
+exec-timeout 10 0
+exit
+ip dhcp excluded-address 10.20.60.1 10.20.60.99
+ip dhcp pool CLINIC
+network 10.20.60.0 255.255.255.0
+default-router 10.20.60.1
+dns-server 10.10.50.10
+domain-name medilink.test
+exit
+ip access-list extended CLINIC-IN
+permit udp any eq 68 any eq 67
+permit icmp 10.20.60.0 0.0.0.255 host 10.20.60.1 echo
+permit udp 10.20.60.0 0.0.0.255 host 10.10.50.10 eq 53
+permit tcp 10.20.60.0 0.0.0.255 host 10.10.50.10 eq 53
+permit udp 10.20.60.0 0.0.0.255 host 10.10.50.10 eq 123
+permit tcp 10.20.60.0 0.0.0.255 host 10.10.50.20 eq 80
+permit icmp 10.20.60.0 0.0.0.255 host 10.10.50.20 echo
+deny ip any any
+exit
+interface GigabitEthernet0/0
+description TO_SW_CLINIC_Gi0/1
+ip address 10.20.60.1 255.255.255.0
+ip access-group CLINIC-IN in
+no shutdown
+exit
+interface GigabitEthernet0/1
+description BACKUP_TO_R_TRANSIT_Gi0/1
+ip address 10.255.0.10 255.255.255.252
+ip ospf cost 50
+no shutdown
+exit
+interface GigabitEthernet0/2
+description PRIMARY_TO_R_HQ_Gi0/2
+ip address 10.255.0.6 255.255.255.252
+ip ospf cost 10
+no shutdown
+exit
+interface Loopback0
+ip address 10.255.255.3 255.255.255.255
+exit
+router ospf 10
+router-id 3.3.3.3
+passive-interface default
+no passive-interface GigabitEthernet0/1
+no passive-interface GigabitEthernet0/2
+network 10.20.60.0 0.0.0.255 area 0
+network 10.255.0.4 0.0.0.3 area 0
+network 10.255.0.8 0.0.0.3 area 0
+network 10.255.255.3 0.0.0.0 area 0
+exit
+logging 10.10.50.10
+ntp server 10.10.50.10
+end
+write memory

@@ -1,0 +1,50 @@
+enable
+configure terminal
+hostname R-TRANSIT
+no ip domain-lookup
+enable secret MediLinkEnable2026
+username netadmin privilege 15 secret MediLinkLab2026
+service password-encryption
+ip domain-name medilink.test
+access-list 10 permit 10.10.99.0 0.0.0.255
+line console 0
+logging synchronous
+exec-timeout 15 0
+exit
+line vty 0 15
+login local
+transport input ssh
+access-class 10 in
+exec-timeout 10 0
+exit
+interface GigabitEthernet0/0
+description TO_R_HQ_Gi0/1
+ip address 10.255.0.2 255.255.255.252
+ip ospf cost 50
+no shutdown
+exit
+interface GigabitEthernet0/1
+description TO_R_CLINIC_Gi0/1
+ip address 10.255.0.9 255.255.255.252
+ip ospf cost 50
+no shutdown
+exit
+interface GigabitEthernet0/2
+shutdown
+exit
+interface Loopback0
+ip address 10.255.255.2 255.255.255.255
+exit
+router ospf 10
+router-id 2.2.2.2
+passive-interface default
+no passive-interface GigabitEthernet0/0
+no passive-interface GigabitEthernet0/1
+network 10.255.0.0 0.0.0.3 area 0
+network 10.255.0.8 0.0.0.3 area 0
+network 10.255.255.2 0.0.0.0 area 0
+exit
+logging 10.10.50.10
+ntp server 10.10.50.10
+end
+write memory

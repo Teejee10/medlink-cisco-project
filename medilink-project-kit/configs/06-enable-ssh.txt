@@ -1,0 +1,7 @@
+enable
+configure terminal
+crypto key generate rsa
+1024
+ip ssh version 2
+end
+write memory

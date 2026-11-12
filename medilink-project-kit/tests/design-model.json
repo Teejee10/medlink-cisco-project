@@ -1,0 +1,110 @@
+{
+  "vlans": [
+    {
+      "id": 10,
+      "name": "CLINICAL",
+      "third": 10,
+      "service": 20
+    },
+    {
+      "id": 20,
+      "name": "BIOMEDICAL",
+      "third": 20,
+      "service": 30
+    },
+    {
+      "id": 30,
+      "name": "ADMIN",
+      "third": 30,
+      "service": 10
+    },
+    {
+      "id": 40,
+      "name": "GUEST",
+      "third": 40,
+      "service": 10
+    },
+    {
+      "id": 50,
+      "name": "SERVERS",
+      "third": 50
+    },
+    {
+      "id": 99,
+      "name": "MANAGEMENT",
+      "third": 99
+    }
+  ],
+  "ports": [
+    [
+      "FastEthernet0/1",
+      10
+    ],
+    [
+      "FastEthernet0/2",
+      10
+    ],
+    [
+      "FastEthernet0/3",
+      20
+    ],
+    [
+      "FastEthernet0/4",
+      20
+    ],
+    [
+      "FastEthernet0/5",
+      30
+    ],
+    [
+      "FastEthernet0/6",
+      40
+    ],
+    [
+      "FastEthernet0/7",
+      99
+    ],
+    [
+      "FastEthernet0/8",
+      50
+    ],
+    [
+      "FastEthernet0/9",
+      50
+    ],
+    [
+      "FastEthernet0/10",
+      50
+    ]
+  ],
+  "links": [
+    {
+      "a": "R-HQ",
+      "ai": "GigabitEthernet0/1",
+      "aip": "10.255.0.1",
+      "b": "R-TRANSIT",
+      "bi": "GigabitEthernet0/0",
+      "bip": "10.255.0.2",
+      "cost": 50
+    },
+    {
+      "a": "R-HQ",
+      "ai": "GigabitEthernet0/2",
+      "aip": "10.255.0.5",
+      "b": "R-CLINIC",
+      "bi": "GigabitEthernet0/2",
+      "bip": "10.255.0.6",
+      "cost": 10
+    },
+    {
+      "a": "R-TRANSIT",
+      "ai": "GigabitEthernet0/1",
+      "aip": "10.255.0.9",
+      "b": "R-CLINIC",
+      "bi": "GigabitEthernet0/1",
+      "bip": "10.255.0.10",
+      "cost": 50
+    }
+  ],
+  "status": "STATIC CHECKS ONLY; Packet Tracer execution pending"
+}
